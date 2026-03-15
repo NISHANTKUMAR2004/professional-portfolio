@@ -223,6 +223,14 @@ footer{padding:32px 48px;border-top:1px solid rgba(255,255,255,.05);display:flex
 <div id="root"></div>
 
 <script type="text/babel">
+/* Error handling */
+window.addEventListener('error', (e) => {
+  console.error('Error:', e.error);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Unhandled rejection:', e.reason);
+});
+
 const { useState, useEffect, useRef } = React;
 
 const DATA = {
@@ -737,7 +745,7 @@ function Contact() {
         </Reveal>
         <Reveal delay={100}>
           <div className="contact-card">
-            <form name="contact" method="POST" netlify style={{display:'contents'}}>
+            <form name="contact" method="POST" netlify="true" style={{display:'contents'}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
                 <div className="input-wrap"><label>Name</label><input type="text" name="name" placeholder="Your name" required/></div>
                 <div className="input-wrap"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required/></div>
@@ -806,57 +814,74 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 
 <script>
-/* Custom cursor */
-const dot = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx=0, my=0, rx=0, ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-(function animate() {
-  dot.style.transform = `translate(${mx-5}px,${my-5}px)`;
-  rx += (mx-rx) * .13;
-  ry += (my-ry) * .13;
-  ring.style.transform = `translate(${rx-16}px,${ry-16}px)`;
-  requestAnimationFrame(animate);
-})();
-
-/* Progress bar */
-window.addEventListener('scroll', () => {
-  const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-  document.querySelector('.progress-fill').style.width = scrolled + '%';
+/* Custom cursor - safe DOM access */
+document.addEventListener('DOMContentLoaded', function() {
+  const dot = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  if(!dot || !ring) return;
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+  (function animate() {
+    dot.style.transform = `translate(${mx-5}px,${my-5}px)`;
+    rx += (mx-rx) * .13;
+    ry += (my-ry) * .13;
+    ring.style.transform = `translate(${rx-16}px,${ry-16}px)`;
+    requestAnimationFrame(animate);
+  })();
 });
 
-/* Back to top */
-const backTop = document.createElement('button');
-backTop.className = 'btn-back-top';
-backTop.innerHTML = '↑';
-backTop.onclick = () => window.scrollTo({top:0, behavior:'smooth'});
-document.body.appendChild(backTop);
-window.addEventListener('scroll', () => {
-  if(window.scrollY > 300) backTop.classList.add('show');
-  else backTop.classList.remove('show');
+/* Progress bar */
+/* Progress bar & Back to top */
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    const progressFill = document.querySelector('.progress-fill');
+    if(progressFill) {
+      window.addEventListener('scroll', () => {
+        const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        progressFill.style.width = scrolled + '%';
+      });
+    }
+  } catch(e) { console.error('Progress bar error:', e); }
+  
+  try {
+    const backTop = document.createElement('button');
+    backTop.className = 'btn-back-top';
+    backTop.innerHTML = '↑';
+    backTop.onclick = () => window.scrollTo({top:0, behavior:'smooth'});
+    document.body.appendChild(backTop);
+    window.addEventListener('scroll', () => {
+      if(window.scrollY > 300) backTop.classList.add('show');
+      else backTop.classList.remove('show');
+    });
+  } catch(e) { console.error('Back to top error:', e); }
 });
 
 /* Loader */
 (function(){
-  const fill = document.getElementById('lfill');
-  const txt = document.getElementById('ltxt');
-  const loader = document.getElementById('loader');
-  const stages = ['LOADING','PAINTING AURORA','BUILDING COMPONENTS','READY'];
-  let p = 0;
-  const iv = setInterval(() => {
-    p += Math.random()*14 + 5;
-    if(p > 100) p = 100;
-    fill.style.width = p + '%';
-    txt.textContent = stages[Math.min(Math.floor(p/34), 3)];
-    if(p >= 100) {
-      clearInterval(iv);
-      setTimeout(() => {
-        loader.style.opacity = '0';
-        loader.style.pointerEvents = 'none';
-        setTimeout(() => loader.remove(), 700);
-      }, 350);
-    }
-  }, 90);
+  try {
+    const fill = document.getElementById('lfill');
+    const txt = document.getElementById('ltxt');
+    const loader = document.getElementById('loader');
+    if(!fill || !txt || !loader) return;
+    const stages = ['LOADING','PAINTING AURORA','BUILDING COMPONENTS','READY'];
+    let p = 0;
+    const iv = setInterval(() => {
+      p += Math.random()*14 + 5;
+      if(p > 100) p = 100;
+      fill.style.width = p + '%';
+      txt.textContent = stages[Math.min(Math.floor(p/34), 3)];
+      if(p >= 100) {
+        clearInterval(iv);
+        setTimeout(() => {
+          loader.style.opacity = '0';
+          loader.style.pointerEvents = 'none';
+          setTimeout(() => loader.remove(), 700);
+        }, 350);
+      }
+    }, 90);
+  } catch(e) {
+    console.error('Loader error:', e);
+  }
 })();
 </script>
 </body>
