@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<title>Nishant Kumar — Portfolio</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:#050814;color:#e2e8f0;overflow-x:hidden;cursor:none}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#0a0f1e}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#00d4ff,#8b5cf6);border-radius:4px}
+
+/* ── Custom Cursor ── */
+#cursor{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#8b5cf6);position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transition:transform .08s;box-shadow:0 0 12px #00d4ff88}
+#cursor-ring{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(0,212,255,.4);position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:transform .18s ease}
+
+/* ── Aurora / Background Blobs ── */
+.aurora-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% -20%,rgba(0,80,120,.35),transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:blobmove var(--d,18s) ease-in-out infinite alternate}
+@keyframes blobmove{0%{transform:translate(0,0) scale(1)}100%{transform:translate(var(--tx,40px),var(--ty,30px)) scale(var(--s,1.12))}}
+
+/* ── Grid Overlay ── */
+.aurora-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+
+/* ── Progress Bar ── */
+.progress-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9999;background:rgba(255,255,255,.05)}
+.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#8b5cf6,#e040fb);width:0%;transition:width .1s;box-shadow:0 0 8px #00d4ff}
+
+/* ── Nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+.nav.scrolled{background:rgba(5,8,20,.82);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,212,255,.08);box-shadow:0 2px 24px rgba(0,0,0,.5)}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b;text-decoration:none;transition:color .25s;cursor:none;position:relative}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;background:linear-gradient(90deg,#00d4ff,#8b5cf6);transition:width .3s}
+.nav-links a:hover{color:#00d4ff}
+.nav-links a:hover::after{width:100%}
+
+section{position:relative;z-index:1}
+
+/* ── Hero ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 40px 80px;text-align:center}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 20px;border-radius:100px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#00d4ff;margin-bottom:28px;box-shadow:0 0 20px rgba(0,212,255,.12)}
+.hero-pill-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:pdot 2s infinite}
+@keyframes pdot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.5);opacity:.3}}
+.hero-name{font-size:clamp(52px,9vw,128px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:20px}
+.hero-name .line1{background:linear-gradient(135deg,#00d4ff 0%,#8b5cf6 50%,#e040fb 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(0,212,255,.25))}
+.hero-name .line2{color:#e2e8f0}
+.hero-sub{font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.6vw,16px);color:#00d4ff;letter-spacing:.14em;margin-bottom:14px;opacity:.8}
+.hero-tag{font-size:clamp(15px,2vw,19px);color:#94a3b8;max-width:540px;margin:0 auto 44px;line-height:1.7;font-weight:400}
+
+/* ── Buttons ── */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:100px;background:linear-gradient(135deg,#00d4ff,#8b5cf6);color:#fff;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:none;cursor:none;transition:all .3s;box-shadow:0 0 24px rgba(0,212,255,.35),0 8px 30px rgba(139,92,246,.25)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 36px rgba(0,212,255,.5),0 16px 40px rgba(139,92,246,.35)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:100px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.25);color:#00d4ff;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .3s;backdrop-filter:blur(10px)}
+.btn-ghost:hover{background:rgba(0,212,255,.14);border-color:rgba(0,212,255,.55);transform:translateY(-3px);box-shadow:0 0 20px rgba(0,212,255,.2)}
+
+/* ── Sections ── */
+.sec{padding:100px 40px}
+.sec-inner{max-width:1100px;margin:0 auto}
+.sec-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:#00d4ff;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:24px;height:2px;background:linear-gradient(90deg,#00d4ff,#8b5cf6);border-radius:2px;box-shadow:0 0 6px #00d4ff88}
+.sec-title{font-size:clamp(34px,5vw,60px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:12px;color:#e2e8f0}
+.grad-text{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sec-sub{color:#64748b;font-size:16px;line-height:1.7;max-width:460px}
+
+/* ── About ── */
+.about-grid{display:grid;grid-template-columns:1fr 1.7fr;gap:48px;align-items:start}
+.avatar-card{background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.1));border:1px solid rgba(0,212,255,.2);border-radius:28px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;overflow:hidden;max-width:320px;box-shadow:0 0 40px rgba(0,212,255,.1)}
+.avatar-initials{font-size:64px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-chip{background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:14px 20px;text-align:center;box-shadow:0 0 16px rgba(0,0,0,.3)}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;line-height:1}
+.skill-row{margin-bottom:18px}
+.skill-label{display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-bottom:8px;color:#cbd5e1}
+.skill-track{height:5px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
+.skill-fill{height:100%;border-radius:5px;width:0%;transition:width 1.4s cubic-bezier(.25,1,.5,1);box-shadow:0 0 8px currentColor}
+
+/* ── Profile Section ── */
+.profile-sec{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 40px 80px;position:relative;z-index:1}
+.profile-inner{max-width:980px;width:100%;margin:0 auto;display:grid;grid-template-columns:340px 1fr;gap:60px;align-items:center}
+.profile-photo-wrap{display:flex;flex-direction:column;align-items:center;gap:28px}
+.profile-photo-ring{width:280px;height:340px;border-radius:28px;padding:4px;background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);position:relative;box-shadow:0 0 60px rgba(0,212,255,.35),0 0 120px rgba(139,92,246,.18);flex-shrink:0;animation:ring-spin 6s linear infinite}
+@keyframes ring-spin{0%{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb)}33%{background:linear-gradient(225deg,#8b5cf6,#e040fb,#00d4ff)}66%{background:linear-gradient(315deg,#e040fb,#00d4ff,#8b5cf6)}100%{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb)}}
+.profile-photo-inner{width:100%;height:100%;border-radius:24px;background:transparent;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;position:relative}
+.profile-photo-inner img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;border-radius:0}
+.profile-photo-placeholder{font-size:100px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;user-select:none;line-height:1}
+.profile-status{display:inline-flex;align-items:center;gap:8px;padding:7px 20px;border-radius:100px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#00d4ff;box-shadow:0 0 18px rgba(0,212,255,.12)}
+.profile-status-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:pdot 2s infinite;flex-shrink:0}
+.profile-info{display:flex;flex-direction:column;gap:0}
+.profile-greeting{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#00d4ff;margin-bottom:10px;opacity:.8}
+.profile-name{font-size:clamp(40px,6vw,76px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:14px}
+.profile-name .pn1{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.profile-name .pn2{color:#e2e8f0}
+.profile-role{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,1.4vw,15px);color:#8b5cf6;letter-spacing:.12em;margin-bottom:16px;opacity:.85}
+.profile-bio{color:#94a3b8;font-size:16px;line-height:1.75;margin-bottom:32px;max-width:480px}
+.profile-stats{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.pstat{background:rgba(255,255,255,.04);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:14px 22px;text-align:center;backdrop-filter:blur(12px);min-width:90px}
+.pstat-num{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;line-height:1;margin-bottom:4px}
+.pstat-lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#64748b;font-weight:600}
+.profile-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:32px}
+.profile-socials{display:flex;gap:12px;flex-wrap:wrap}
+.psoc{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#94a3b8;font-size:12px;font-weight:600;text-decoration:none;transition:all .25s;cursor:none}
+.psoc:hover{background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.3);color:#00d4ff;transform:translateY(-2px)}
+.profile-upload-hint{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;color:#475569;text-align:center;max-width:220px;line-height:1.7;margin-top:-10px}
+@media(max-width:768px){.profile-inner{grid-template-columns:1fr;gap:36px;text-align:center}.profile-photo-wrap{margin:0 auto}.profile-stats,.profile-actions,.profile-socials{justify-content:center}.profile-bio{max-width:100%}.profile-sec{padding:110px 20px 60px}.profile-photo-ring{width:220px;height:270px}}
+
+/* ── Cards – shared dark glass ── */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px}
+.proj-card{background:rgba(255,255,255,.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);border-radius:24px;overflow:hidden;transition:transform .35s ease,box-shadow .35s ease,border-color .35s;cursor:none;box-shadow:0 4px 30px rgba(0,0,0,.5)}
+.proj-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 0 40px rgba(0,212,255,.12),0 24px 60px rgba(0,0,0,.6);border-color:rgba(0,212,255,.3)}
+.proj-hero{height:160px;display:flex;align-items:center;justify-content:center;font-size:54px;position:relative}
+.proj-badge{position:absolute;top:12px;right:12px;padding:4px 12px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;font-weight:600;backdrop-filter:blur(8px)}
+.proj-body{padding:26px}
+.proj-tag{display:inline-flex;padding:3px 10px;border-radius:100px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.18);font-size:10px;font-weight:600;color:#00d4ff;letter-spacing:.04em;margin:3px 2px}
+
+/* ── Certs ── */
+.cert-scroll{display:flex;gap:20px;overflow-x:auto;padding:8px 0 20px;scrollbar-width:thin;scrollbar-color:rgba(0,212,255,.2) transparent}
+.cert-card{min-width:260px;background:rgba(255,255,255,.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:26px;transition:transform .3s,box-shadow .3s,border-color .3s;cursor:none;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.cert-card:hover{transform:translateY(-7px);box-shadow:0 0 32px rgba(0,212,255,.12),0 20px 50px rgba(0,0,0,.5);border-color:rgba(0,212,255,.25)}
+.cert-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+
+/* ── Skills ── */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.skill-group{background:rgba(255,255,255,.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(0,0,0,.4);transition:border-color .3s,box-shadow .3s}
+.skill-group:hover{border-color:rgba(0,212,255,.2);box-shadow:0 0 28px rgba(0,212,255,.08)}
+.chip{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:13px;font-weight:600;margin-bottom:8px;transition:all .25s;cursor:none;color:#cbd5e1}
+.chip:hover{background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.3);color:#00d4ff;transform:translateX(5px);box-shadow:0 0 14px rgba(0,212,255,.15)}
+.chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ── Timeline ── */
+.timeline{max-width:680px;margin:0 auto;position:relative}
+.timeline::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:1.5px;background:linear-gradient(180deg,rgba(0,212,255,.5),rgba(139,92,246,.4),transparent)}
+.tl-item{display:flex;gap:36px;padding-bottom:40px;opacity:0;transform:translateX(-24px);transition:all .6s ease}
+.tl-item.vis{opacity:1;transform:translateX(0)}
+.tl-dot{width:46px;height:46px;border-radius:50%;background:rgba(5,8,20,.9);border:1.5px solid rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;z-index:1;box-shadow:0 0 16px rgba(0,212,255,.2)}
+.tl-card{flex:1;background:rgba(255,255,255,.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+
+/* ── Achievements ── */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;max-width:820px}
+.ach-card{background:rgba(255,255,255,.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:28px;text-align:center;transition:all .35s;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.ach-card:hover{transform:translateY(-6px);border-color:rgba(0,212,255,.25);box-shadow:0 0 30px rgba(0,212,255,.12),0 16px 40px rgba(0,0,0,.5)}
+.ach-num{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;line-height:1;margin-bottom:6px}
+
+/* ── Contact ── */
+.contact-card{background:rgba(255,255,255,.03);backdrop-filter:blur(24px);border:1px solid rgba(0,212,255,.12);border-radius:28px;padding:46px;max-width:680px;margin:0 auto;box-shadow:0 0 50px rgba(0,212,255,.06),0 24px 60px rgba(0,0,0,.5)}
+.input-wrap{margin-bottom:18px}
+.input-wrap label{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#64748b;margin-bottom:7px;font-weight:600}
+.input-wrap input,.input-wrap textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;font-family:'Outfit',sans-serif;font-size:15px;color:#e2e8f0;outline:none;transition:border-color .25s,box-shadow .25s;resize:vertical}
+.input-wrap input::placeholder,.input-wrap textarea::placeholder{color:#475569}
+.input-wrap input:focus,.input-wrap textarea:focus{border-color:rgba(0,212,255,.45);box-shadow:0 0 0 3px rgba(0,212,255,.09),0 0 20px rgba(0,212,255,.08)}
+.social-link{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#94a3b8;font-size:13px;font-weight:600;text-decoration:none;transition:all .25s;cursor:none}
+.social-link:hover{background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.3);color:#00d4ff;transform:translateY(-2px);box-shadow:0 0 16px rgba(0,212,255,.15)}
+
+/* ── Footer ── */
+footer{padding:32px 48px;border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;background:rgba(5,8,20,.9);backdrop-filter:blur(14px);color:#475569}
+.footer-copy{font-size:13px}
+
+/* ── Back to top ── */
+.btn-back-top{position:fixed;bottom:22px;right:22px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#8b5cf6);color:#050814;border:none;cursor:none;opacity:0;transition:all .35s;z-index:999;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 0 20px rgba(0,212,255,.4)}
+.btn-back-top.show{opacity:1}
+.btn-back-top:hover{transform:translateY(-3px);box-shadow:0 0 32px rgba(0,212,255,.6)}
+
+/* ── Reveal Animations ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+/* ── Loader ── */
+#loader{position:fixed;inset:0;background:linear-gradient(135deg,#050814,#0a0f1e);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .6s}
+.loader-logo{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em}
+.loader-track{width:200px;height:3px;background:rgba(0,212,255,.1);border-radius:3px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#8b5cf6,#e040fb);width:0%;transition:width .05s linear;border-radius:3px;box-shadow:0 0 10px #00d4ff}
+.loader-txt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;color:#00d4ff;opacity:.6}
+
+@keyframes float-t{0%{transform:translateY(0)}100%{transform:translateY(-18px)}}
+
+/* ── Glow pulse for hero pill dot ── */
+@keyframes glowpulse{0%,100%{box-shadow:0 0 6px #00d4ff,0 0 14px #00d4ff44}50%{box-shadow:0 0 14px #00d4ff,0 0 30px #00d4ff66}}
+
+/* ── Letter-by-letter name animation ── */
+@keyframes letter-rise{0%{opacity:0;transform:translateY(32px) scale(.75);filter:blur(8px)}55%{opacity:1;transform:translateY(-5px) scale(1.06);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.typed-name .t-letter{display:inline-block;opacity:0;animation:letter-rise .6s cubic-bezier(.23,1,.32,1) forwards}
+.typed-name .t-space{display:inline-block;width:.25em}
+
+@media(max-width:768px){
+  .nav{padding:16px 20px}
+  .nav-links{display:none}
+  .about-grid{grid-template-columns:1fr}
+  .sec{padding:70px 20px}
+  .hero{padding:100px 20px 70px}
+  footer{padding:24px 20px;flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<div class="progress-bar"><div class="progress-fill"></div></div>
+
+<div class="aurora-bg">
+  <div class="blob" style="width:700px;height:700px;background:radial-gradient(circle,rgba(0,180,255,.7),rgba(0,80,180,.4));top:-150px;left:-120px;--d:22s;--tx:70px;--ty:50px;--s:1.08"></div>
+  <div class="blob" style="width:550px;height:550px;background:radial-gradient(circle,rgba(139,92,246,.7),rgba(80,0,180,.4));top:25%;right:-100px;--d:17s;--tx:-60px;--ty:70px;--s:1.14"></div>
+  <div class="blob" style="width:480px;height:480px;background:radial-gradient(circle,rgba(0,100,180,.6),rgba(0,50,100,.4));bottom:8%;left:12%;--d:24s;--tx:80px;--ty:-50px;--s:1.06"></div>
+  <div class="blob" style="width:400px;height:400px;background:radial-gradient(circle,rgba(224,64,251,.5),rgba(100,0,200,.3));bottom:22%;right:18%;--d:19s;--tx:-50px;--ty:60px;--s:1.1"></div>
+  <div class="blob" style="width:340px;height:340px;background:radial-gradient(circle,rgba(0,212,255,.4),rgba(0,80,160,.3));top:48%;left:38%;--d:15s;--tx:40px;--ty:-70px;--s:1.18"></div>
+</div>
+
+<div id="loader">
+  <div class="loader-logo">NK/</div>
+  <div class="loader-track"><div class="loader-fill" id="lfill"></div></div>
+  <div class="loader-txt" id="ltxt">LOADING</div>
+</div>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const DATA = {
+  name: "Nishant Kumar",
+  title: "Full Stack Developer / ML Engineer",
+  tagline: "Building elegant systems at the intersection of software engineering, backend architecture, and machine learning.",
+  email: "nishantkrguddu77@gmail.com",
+  phone: "+91 9931518514",
+  linkedin: "https://www.linkedin.com/in/nishantkumar02/",
+  github: "https://github.com/NISHANTKUMAR2004",
+  resume: "https://drive.google.com/file/d/YOUR_RESUME_FILE_ID/view", // Update with your resume link
+  services: [
+    { icon: "💻", title: "Full Stack Development", desc: "Building end-to-end web applications with modern frameworks like React, Node.js, and databases." },
+    { icon: "🤖", title: "Machine Learning", desc: "Developing intelligent systems using Python, Scikit-learn, and data analysis for predictive models." },
+    { icon: "🔧", title: "API Development", desc: "Designing and implementing RESTful APIs with authentication, security, and scalability in mind." },
+    { icon: "📊", title: "Data Analysis", desc: "Analyzing datasets, uncovering patterns, and visualizing insights with Pandas and Matplotlib." }
+  ],
+  projects: [
+    {
+      emoji: "🚨", title: "ReliefSync", date: "JAN 2026",
+      desc: "Smart disaster response coordination platform — real-time resource allocation, relief tracking, and multi-team coordination for emergencies.",
+      tags: ["React.js","Node.js","Express.js","PostgreSQL","JWT"],
+      color: "linear-gradient(135deg,rgba(0,212,255,.14),rgba(139,92,246,.1))",
+      badgeColor: "#00d4ff", badgeBg: "rgba(0,212,255,.12)",
+      github: "https://github.com/NISHANTKUMAR2004",
+    },
+    {
+      emoji: "🌧️", title: "Rainfall Pattern Analysis", date: "NOV 2025",
+      desc: "Unsupervised ML system for uncovering hidden rainfall patterns. K-Means & hierarchical clustering on historical climate data with full visualization.",
+      tags: ["Python","Scikit-learn","Pandas","Matplotlib","Jupyter"],
+      color: "linear-gradient(135deg,rgba(139,92,246,.14),rgba(224,64,251,.08))",
+      badgeColor: "#8b5cf6", badgeBg: "rgba(139,92,246,.12)",
+      github: "https://github.com/NISHANTKUMAR2004",
+    },
+    {
+      emoji: "🎯", title: "Recommendation Engine", date: "OCT 2025",
+      desc: "Intelligent content recommendation system using collaborative & content-based filtering. Delivers personalized suggestions with high precision using user behavior analysis.",
+      tags: ["Python","Scikit-learn","Pandas","Flask","Cosine Similarity"],
+      color: "linear-gradient(135deg,rgba(6,182,212,.14),rgba(16,185,129,.1))",
+      badgeColor: "#06b6d4", badgeBg: "rgba(6,182,212,.12)",
+      github: "https://github.com/NISHANTKUMAR2004",
+    },
+    {
+      emoji: "🧠", title: "NLP Toxic Speech Analysis", date: "DEC 2025",
+      desc: "Natural Language Processing system to detect and classify toxic speech. Multi-label classification using TF-IDF vectorization and ML pipelines for hate speech detection.",
+      tags: ["Python","NLP","TF-IDF","Scikit-learn","Pandas"],
+      color: "linear-gradient(135deg,rgba(239,68,68,.14),rgba(249,115,22,.1))",
+      badgeColor: "#ef4444", badgeBg: "rgba(239,68,68,.12)",
+      github: "https://github.com/NISHANTKUMAR2004",
+    },
+  ],
+  certs: [
+    { icon:"☁️", org:"ORACLE", title:"Generative AI Professional", date:"Sept 2025", color:"#f97316", bg:"rgba(249,115,22,.1)" },
+    { icon:"🌐", org:"GOOGLE", title:"Bits and Bytes of Computer Networking", date:"Apr 2024", color:"#4285f4", bg:"rgba(66,133,244,.1)" },
+    { icon:"🖥️", org:"IBM", title:"Introduction to Hardware & Operating Systems", date:"Aug 2024", color:"#0062ff", bg:"rgba(0,98,255,.1)" },
+    { icon:"📡", org:"UNIV. OF COLORADO", title:"Fundamentals of Network Communication", date:"Nov 2024", color:"#f59e0b", bg:"rgba(245,158,11,.1)" },
+    { icon:"⛅", org:"AWS", title:"AWS Cloud Practitioner", date:"Oct 2024", color:"#ff9900", bg:"rgba(255,153,0,.1)" },
+  ],
+  skillGroups: [
+    { label:"Languages", icon:"⚙️", color:"#7c3aed", items:["C++","Python","Java","C","JavaScript"] },
+    { label:"Frontend", icon:"🎨", color:"#ec4899", items:["React.js","HTML5","CSS3","JavaScript (ES6+)"] },
+    { label:"Backend", icon:"🔧", color:"#f97316", items:["Node.js","Express.js","RESTful APIs","JWT Auth"] },
+    { label:"Database", icon:"🗄️", color:"#06b6d4", items:["MySQL","MongoDB","PostgreSQL"] },
+    { label:"ML / AI", icon:"🧠", color:"#f59e0b", items:["Scikit-learn","NumPy / Pandas","Matplotlib","Generative AI"] },
+    { label:"Tools", icon:"🛠️", color:"#10b981", items:["Git / GitHub","Postman","VS Code","Linux"] },
+  ],
+  timeline: [
+    { icon:"🎓", color:"rgba(124,58,237,.15)", dateColor:"#7c3aed", date:"AUG 2023 – PRESENT", title:"B.Tech Computer Science Engineering", org:"Lovely Professional University, Phagwara", orgColor:"#7c3aed", detail:"Specializing in full-stack development, algorithms, and ML systems." },
+    { icon:"💼", color:"rgba(236,72,153,.12)", dateColor:"#ec4899", date:"JUN 2025 – JUL 2025", title:"Training — DSA with C++", org:"Center of Professional Enhancement, LPU", orgColor:"#ec4899", detail:"Arrays, linked lists, trees, graphs, recursion, sorting, DP — intensive problem solving." },
+    { icon:"📐", color:"rgba(249,115,22,.12)", dateColor:"#f97316", date:"MAR 2022 – MAY 2023", title:"Intermediate (PCM) — 82%", org:"B.B.M College, Jehanabad, Bihar", orgColor:"#f97316", detail:"Physics, Chemistry, Mathematics — strong academic foundation." },
+    { icon:"🏫", color:"rgba(245,158,11,.12)", dateColor:"#f59e0b", date:"MAR 2019 – MAY 2020", title:"Matriculation — 94.8%", org:"D.A.V School, Patna, Bihar", orgColor:"#f59e0b", detail:"Exceptional academic performance — the foundation of a technical career." },
+  ],
+  achievements: [
+    { num:"1st", label:"Agentic AI Hackathon", sub:"Infenion Technologies", color:"#10b981" },
+    { num:"500+", label:"DSA Problems", sub:"GeeksForGeeks", color:"#7c3aed" },
+    { num:"3★", label:"HackerRank", sub:"Problem Solving", color:"#ec4899" },
+    { num:"94.8%", label:"Matriculation", sub:"D.A.V School", color:"#f59e0b" },
+  ]
+};
+
+function SkillBar({ label, pct, color }) {
+  const ref = useRef(null);
+  const [w, setW] = useState(0);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting) setW(pct); }, { threshold: .2 });
+    if(ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div className="skill-row" ref={ref}>
+      <div className="skill-label">
+        <span style={{color:'#334155'}}>{label}</span>
+        <span style={{fontFamily:'JetBrains Mono',fontSize:'12px',color}}>{pct}%</span>
+      </div>
+      <div className="skill-track">
+        <div className="skill-fill" style={{width:w+'%',background:`linear-gradient(90deg,${color},${color}88)`}}/>
+      </div>
+    </div>
+  );
+}
+
+function Reveal({ children, delay=0 }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if(e.isIntersecting) { setTimeout(() => { if(ref.current) ref.current.classList.add('vis'); }, delay); }
+    }, { threshold:.1 });
+    if(ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return <div className="reveal" ref={ref}>{children}</div>;
+}
+
+function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', h);
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+  return (
+    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <div className="nav-logo">NK/</div>
+      <ul className="nav-links">
+        {[['Profile','#profile'],['About','#about'],['Resume','#resume'],['Projects','#projects'],['Skills','#skills'],['Certifications','#certificates'],['Experience','#experience'],['Contact','#contact']].map(([l,h]) =>
+          <li key={l}><a href={h}>{l}</a></li>
+        )}
+      </ul>
+    </nav>
+  );
+}
+
+function ProfileCard() {
+  /* Replace the src below with your actual hosted photo URL.
+     e.g. src="https://i.imgur.com/yourphoto.jpg"
+     Leave src="" to show the NK initials placeholder. */
+  const photoSrc = "https://i.imgur.com/yourphoto.jpg"; // Update with your hosted photo URL
+  return (
+    <section id="profile" className="profile-sec">
+      <div className="profile-inner">
+        {/* ── Left: Photo ── */}
+        <div className="profile-photo-wrap">
+          <div className="profile-photo-ring">
+            <div className="profile-photo-inner">
+              {photoSrc
+                ? <img src={photoSrc} alt="Nishant Kumar"/>
+                : <span className="profile-photo-placeholder">NK</span>
+              }
+            </div>
+          </div>
+          <div className="profile-status">
+            <div className="profile-status-dot"/>
+            &nbsp;Open to Work
+          </div>
+          <div className="profile-upload-hint">
+            Set <code style={{color:'#00d4ff',fontSize:'9px'}}>photoSrc</code> in HTML
+            to display your photo here.
+          </div>
+        </div>
+        {/* ── Right: Info ── */}
+        <div className="profile-info">
+          <div className="profile-greeting">Hello, I'm</div>
+          <h1 className="profile-name">
+            <div className="pn1">Nishant</div>
+            <div className="pn2">Kumar</div>
+          </h1>
+          <div className="profile-role">Full Stack Developer &nbsp;·&nbsp; ML Engineer &nbsp;·&nbsp; CSE @ LPU</div>
+          <p className="profile-bio">
+            Passionate about building elegant, full-stack systems and intelligent ML-powered applications.
+            From clean REST APIs to predictive clustering models — I love crafting software that feels alive.
+          </p>
+          {/* Stats */}
+          <div className="profile-stats">
+            {[{n:'4',l:'Certifications',c:'#06b6d4'},{n:'4',l:'Projects',c:'#00d4ff'}].map(({n,l,c})=>(
+              <div key={l} className="pstat">
+                <div className="pstat-num" style={{color:c}}>{n}</div>
+                <div className="pstat-lbl">{l}</div>
+              </div>
+            ))}
+          </div>
+          {/* CTA Buttons */}
+          <div className="profile-actions">
+            <a href="#projects" className="btn-primary">View Projects →</a>
+            <a href={DATA.resume} target="_blank" className="btn-ghost">Download Resume 📄</a>
+          </div>
+          {/* Socials */}
+          <div className="profile-socials">
+            <a href={DATA.linkedin} target="_blank" className="psoc">🔗 LinkedIn</a>
+            <a href={DATA.github} target="_blank" className="psoc">🐙 GitHub</a>
+            <a href={`mailto:${DATA.email}`} className="psoc">✉️ Email</a>
+            <a href={`tel:${DATA.phone}`} className="psoc">📞 Phone</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* letter-by-letter name animation injected via TypedName component */
+function TypedName({ text, className, baseDelay=0, delayStep=70 }) {
+  return (
+    <span className={'typed-name ' + (className||'')}>
+      {text.split('').map((ch, i) =>
+        ch === ' '
+          ? <span key={i} className="t-space"/>
+          : <span key={i} className="t-letter"
+              style={{animationDelay:`${baseDelay + i*delayStep}ms`}}>
+              {ch}
+            </span>
+      )}
+    </span>
+  );
+}
+
+function Hero() {
+  const floats = [
+    {t:'React.js',s:{top:'20%',left:'5%'},d:0},
+    {t:'Node.js',s:{top:'28%',right:'6%'},d:0.4},
+    {t:'Python',s:{bottom:'30%',left:'8%'},d:0.8},
+    {t:'PostgreSQL',s:{bottom:'22%',right:'9%'},d:1.2},
+    {t:'C++',s:{top:'55%',left:'3%'},d:1.6},
+    {t:'ML/AI',s:{top:'16%',right:'16%'},d:2.0},
+  ];
+  return (
+    <section id="hero" className="hero">
+      <div style={{position:'relative',zIndex:2,maxWidth:'860px',margin:'0 auto'}}>
+        <div className="hero-pill"><div className="hero-pill-dot"/>&nbsp;Available for Opportunities</div>
+        <h1 className="hero-name">
+          <div className="line1"><TypedName text="Nishant" baseDelay={200} delayStep={80}/></div>
+          <div className="line2"><TypedName text="Kumar" baseDelay={900} delayStep={80}/></div>
+        </h1>
+        <p className="hero-sub">Full Stack Developer &nbsp;·&nbsp; ML Engineer &nbsp;·&nbsp; CSE @ LPU</p>
+        <p className="hero-tag">{DATA.tagline}</p>
+        <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
+          <a href="#projects" className="btn-primary">View Projects →</a>
+          <a href="#contact" className="btn-ghost">Get in Touch</a>
+        </div>
+        {floats.map(({t,s,d}) => (
+          <div key={t} style={{...s,position:'absolute',padding:'6px 14px',borderRadius:'100px',border:'1px solid rgba(0,212,255,.2)',background:'rgba(5,8,20,.6)',backdropFilter:'blur(12px)',fontSize:'12px',fontWeight:'600',color:'#00d4ff',animation:`float-t ${5.5+d*.7}s ease-in-out ${d}s infinite alternate`,boxShadow:'0 0 12px rgba(0,212,255,.1)'}}>
+            {t}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <section id="about" className="sec">
+      <div className="sec-inner">
+        <Reveal>
+          <div className="about-grid">
+            <div>
+              <div className="avatar-card">
+                <div className="avatar-initials">NK</div>
+                <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at 40% 30%,rgba(0,212,255,.15),transparent 70%)'}}/>
+              </div>
+              <div style={{display:'flex',gap:'12px',marginTop:'20px',flexWrap:'wrap'}}>
+                <a href={DATA.linkedin} target="_blank" className="social-link">LinkedIn</a>
+                <a href={DATA.github} target="_blank" className="social-link">GitHub</a>
+                <a href={`mailto:${DATA.email}`} className="social-link">Email</a>
+              </div>
+              <div style={{display:'flex',gap:'12px',marginTop:'18px',flexWrap:'wrap'}}>
+                {[{n:'1st',l:'Hackathon',c:'#00d4ff'},{n:'5',l:'Certs',c:'#e040fb'}].map(({n,l,c})=>(
+                  <div key={l} className="stat-chip">
+                    <div className="stat-num" style={{color:c}}>{n}</div>
+                    <div style={{fontSize:'10px',color:'#94a3b8',letterSpacing:'.1em',marginTop:'3px'}}>{l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="sec-label">01 — About Me</div>
+              <h2 className="sec-title">Crafting digital <span className="grad-text">experiences.</span></h2>
+              <p style={{color:'#94a3b8',lineHeight:'1.8',marginBottom:'32px',fontSize:'16px'}}>
+                CSE student at Lovely Professional University (CGPA: 8.77) with a passion for building full-stack systems and ML-powered applications. From architecting REST APIs to training clustering models, I love the full spectrum — clean code, intelligent algorithms, and interfaces that feel alive.
+              </p>
+              <SkillBar label="Full Stack Development" pct={88} color="#7c3aed"/>
+              <SkillBar label="Data Structures & Algorithms" pct={85} color="#ec4899"/>
+              <SkillBar label="Machine Learning" pct={75} color="#f97316"/>
+              <SkillBar label="Database Design" pct={80} color="#06b6d4"/>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Resume() {
+  return (
+    <section id="resume" className="sec" style={{background:'rgba(0,212,255,.02)',backdropFilter:'blur(4px)'}}>
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{textAlign:'center',marginBottom:'48px'}}>
+            <div className="sec-label" style={{justifyContent:'center'}}>02 — Resume</div>
+            <h2 className="sec-title">Download My <span className="grad-text">Resume.</span></h2>
+            <p style={{color:'#94a3b8',fontSize:'16px',maxWidth:'440px',margin:'0 auto',lineHeight:'1.7'}}>Get a detailed overview of my experience, skills, and projects.</p>
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <div style={{display:'flex',justifyContent:'center'}}>
+            <a href={DATA.resume} target="_blank" className="btn-primary" style={{fontSize:'16px',padding:'16px 32px'}}>Download Resume 📄</a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Services() {
+  return (
+    <section id="services" className="sec">
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{textAlign:'center',marginBottom:'48px'}}>
+            <div className="sec-label" style={{justifyContent:'center'}}>03 — Services</div>
+            <h2 className="sec-title">What I <span className="grad-text">Offer.</span></h2>
+            <p style={{color:'#64748b',fontSize:'16px',maxWidth:'440px',margin:'0 auto',lineHeight:'1.7'}}>Specialized services to bring your ideas to life with cutting-edge technology.</p>
+          </div>
+        </Reveal>
+        <div className="proj-grid">
+          {DATA.services.map((s,i) => (
+            <Reveal key={s.title} delay={i*120}>
+              <div className="proj-card" style={{textAlign:'center'}}>
+                <div className="proj-hero" style={{background:'linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.08))'}}>
+                  <span style={{fontSize:'60px'}}>{s.icon}</span>
+                </div>
+                <div className="proj-body">
+                  <h3 style={{fontSize:'20px',fontWeight:'700',marginBottom:'8px',color:'#e2e8f0'}}>{s.title}</h3>
+                  <p style={{color:'#94a3b8',fontSize:'14px',lineHeight:'1.7'}}>{s.desc}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Projects() {
+  return (
+    <section id="projects" className="sec" style={{background:'rgba(139,92,246,.02)',backdropFilter:'blur(4px)'}}>
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{marginBottom:'52px'}}>
+            <div className="sec-label">04 — Projects</div>
+            <h2 className="sec-title">Things I've <span className="grad-text">built.</span></h2>
+          </div>
+        </Reveal>
+        <div className="proj-grid">
+          {DATA.projects.map((p,i) => (
+            <Reveal key={p.title} delay={i*120}>
+              <div className="proj-card">
+                <div className="proj-hero" style={{background:p.color}}>
+                  <span>{p.emoji}</span>
+                  <div className="proj-badge" style={{color:p.badgeColor,background:p.badgeBg}}>{p.date}</div>
+                </div>
+                <div className="proj-body">
+                  <h3 style={{fontSize:'20px',fontWeight:'700',marginBottom:'8px',color:'#e2e8f0'}}>{p.title}</h3>
+                  <p style={{color:'#94a3b8',fontSize:'14px',lineHeight:'1.7',marginBottom:'16px'}}>{p.desc}</p>
+                  <div style={{marginBottom:'20px'}}>{p.tags.map(t => <span key={t} className="proj-tag">{t}</span>)}</div>
+                  <div style={{display:'flex',gap:'10px'}}>
+                    <a href={p.github} target="_blank" className="btn-ghost" style={{fontSize:'11px',padding:'9px 18px'}}>GitHub →</a>
+                    <a href="#" className="social-link" style={{fontSize:'11px',padding:'9px 18px'}}>Live Demo</a>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Certificates() {
+  return (
+    <section id="certificates" className="sec">
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{marginBottom:'44px'}}>
+            <div className="sec-label">05 — Certifications</div>
+            <h2 className="sec-title">Credentials & <span className="grad-text">Learning.</span></h2>
+          </div>
+        </Reveal>
+        <div className="cert-scroll">
+          {DATA.certs.map(c => (
+            <div key={c.title} className="cert-card">
+              <div className="cert-icon" style={{background:c.bg,border:`1px solid ${c.color}30`}}>{c.icon}</div>
+              <div style={{fontFamily:'JetBrains Mono',fontSize:'9px',letterSpacing:'.2em',color:c.color,marginBottom:'7px',fontWeight:600}}>{c.org}</div>
+                <h4 style={{fontSize:'15px',fontWeight:'700',marginBottom:'6px',lineHeight:'1.4',color:'#e2e8f0'}}>{c.title}</h4>
+              <div style={{fontSize:'12px',color:'#94a3b8',marginBottom:'16px'}}>{c.date}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Skills() {
+  return (
+    <section id="skills" className="sec" style={{background:'rgba(0,123,255,.015)'}}>
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{marginBottom:'52px'}}>
+            <div className="sec-label">06 — Skills</div>
+            <h2 className="sec-title">Tech Arsenal & <span className="grad-text">Expertise.</span></h2>
+          </div>
+        </Reveal>
+        <div className="skills-grid">
+          {DATA.skillGroups.map((g,i) => (
+            <Reveal key={g.label} delay={i*80}>
+              <div className="skill-group">
+                <div style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'20px'}}>
+                  <span style={{fontSize:'22px'}}>{g.icon}</span>
+                  <div>
+                    <div style={{fontFamily:'JetBrains Mono',fontSize:'9px',letterSpacing:'.2em',color:g.color,marginBottom:'2px',fontWeight:600}}>{g.label.toUpperCase()}</div>
+                    <div style={{fontSize:'14px',fontWeight:'700',color:'#e2e8f0'}}>{g.label}</div>
+                  </div>
+                </div>
+                {g.items.map(s => (
+                  <div key={s} className="chip">
+                    <div className="chip-dot" style={{background:g.color,boxShadow:`0 0 5px ${g.color}60`}}/>
+                    {s}
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Experience() {
+  const refs = useRef([]);
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+    }, {threshold:.18});
+    refs.current.forEach(r => { if(r) obs.observe(r); });
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <section id="experience" className="sec">
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{marginBottom:'52px'}}>
+            <div className="sec-label">07 — Experience & Education</div>
+            <h2 className="sec-title">The journey <span className="grad-text">so far.</span></h2>
+          </div>
+        </Reveal>
+        <div className="timeline">
+          {DATA.timeline.map((t,i) => (
+            <div key={t.title} className="tl-item" ref={el => refs.current[i]=el} style={{transitionDelay:i*.1+'s'}}>
+              <div className="tl-dot" style={{background:t.color}}>{t.icon}</div>
+              <div className="tl-card">
+                <div style={{fontFamily:'JetBrains Mono',fontSize:'9px',letterSpacing:'.15em',color:t.dateColor,marginBottom:'7px',fontWeight:600}}>{t.date}</div>
+                <h3 style={{fontSize:'18px',fontWeight:'700',marginBottom:'5px',color:'#e2e8f0'}}>{t.title}</h3>
+                <p style={{color:t.orgColor,fontSize:'13px',fontWeight:'600',marginBottom:'8px'}}>{t.org}</p>
+                <p style={{color:'#94a3b8',fontSize:'14px',lineHeight:'1.7'}}>{t.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Achievements() {
+  return (
+    <section className="sec" style={{background:'rgba(106,13,173,.02)',padding:'60px 40px'}}>
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{marginBottom:'40px'}}>
+            <div className="sec-label">08 — Achievements</div>
+            <h2 className="sec-title">Milestones & <span className="grad-text">Rankings.</span></h2>
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <div className="ach-grid">
+            {DATA.achievements.map(a => (
+              <div key={a.label} className="ach-card">
+                <div className="ach-num" style={{color:a.color}}>{a.num}</div>
+                <div style={{fontWeight:'700',fontSize:'14px',marginBottom:'4px',color:'#e2e8f0'}}>{a.label}</div>
+                <div style={{fontSize:'12px',color:'#94a3b8'}}>{a.sub}</div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  return (
+    <section id="contact" className="sec">
+      <div className="sec-inner">
+        <Reveal>
+          <div style={{textAlign:'center',marginBottom:'48px'}}>
+            <div className="sec-label" style={{justifyContent:'center'}}>09 — Contact</div>
+            <h2 className="sec-title">Let's build <span className="grad-text">something.</span></h2>
+            <p style={{color:'#94a3b8',fontSize:'16px',maxWidth:'440px',margin:'0 auto',lineHeight:'1.7'}}>Have a project, opportunity, or just want to connect? My inbox is always open.</p>
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <div className="contact-card">
+            <form name="contact" method="POST" netlify style={{display:'contents'}}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
+                <div className="input-wrap"><label>Name</label><input type="text" name="name" placeholder="Your name" required/></div>
+                <div className="input-wrap"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required/></div>
+              </div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
+                <div className="input-wrap"><label>Phone</label><input type="tel" name="phone" placeholder="+1 (555) 123-4567"/></div>
+                <div className="input-wrap"><label>Subject</label><input type="text" name="subject" placeholder="Opportunity / Collaboration / Hello"/></div>
+              </div>
+              <div className="input-wrap"><label>Message</label><textarea name="message" rows="5" placeholder="Tell me about what you're building..." required/></div>
+              <div style={{display:'flex',gap:'14px',alignItems:'center',flexWrap:'wrap',marginTop:'4px'}}>
+                <button type="submit" className="btn-primary" style={{border:'none',cursor:'pointer'}}>
+                  Send Message →
+                </button>
+                <a href={`mailto:${DATA.email}`} className="btn-ghost">{DATA.email}</a>
+              </div>
+            </form>
+          </div>
+        </Reveal>
+        <Reveal delay={160}>
+          <div style={{display:'flex',gap:'12px',flexWrap:'wrap',justifyContent:'center',marginTop:'28px'}}>
+            <a href={DATA.linkedin} target="_blank" className="social-link">LinkedIn</a>
+            <a href={DATA.github} target="_blank" className="social-link">GitHub</a>
+            <a href={`mailto:${DATA.email}`} className="social-link">Email</a>
+            <a href={`tel:${DATA.phone}`} className="social-link">{DATA.phone}</a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer>
+      <div className="footer-copy" style={{color:'#475569',fontSize:'13px'}}>© 2026 Nishant Kumar — Built with React & passion.</div>
+      <div style={{display:'flex',gap:'10px'}}>
+        <a href={DATA.linkedin} target="_blank" className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>LinkedIn</a>
+        <a href={DATA.github} target="_blank" className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>GitHub</a>
+        <a href={`mailto:${DATA.email}`} className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>Email</a>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <Nav/>
+      <ProfileCard/>
+      <Hero/>
+      <About/>
+      <Resume/>
+      <Services/>
+      <Projects/>
+      <Certificates/>
+      <Skills/>
+      <Experience/>
+      <Achievements/>
+      <Contact/>
+      <Footer/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+<script>
+/* Custom cursor */
+const dot = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function animate() {
+  dot.style.transform = `translate(${mx-5}px,${my-5}px)`;
+  rx += (mx-rx) * .13;
+  ry += (my-ry) * .13;
+  ring.style.transform = `translate(${rx-16}px,${ry-16}px)`;
+  requestAnimationFrame(animate);
+})();
+
+/* Progress bar */
+window.addEventListener('scroll', () => {
+  const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.querySelector('.progress-fill').style.width = scrolled + '%';
+});
+
+/* Back to top */
+const backTop = document.createElement('button');
+backTop.className = 'btn-back-top';
+backTop.innerHTML = '↑';
+backTop.onclick = () => window.scrollTo({top:0, behavior:'smooth'});
+document.body.appendChild(backTop);
+window.addEventListener('scroll', () => {
+  if(window.scrollY > 300) backTop.classList.add('show');
+  else backTop.classList.remove('show');
+});
+
+/* Loader */
+(function(){
+  const fill = document.getElementById('lfill');
+  const txt = document.getElementById('ltxt');
+  const loader = document.getElementById('loader');
+  const stages = ['LOADING','PAINTING AURORA','BUILDING COMPONENTS','READY'];
+  let p = 0;
+  const iv = setInterval(() => {
+    p += Math.random()*14 + 5;
+    if(p > 100) p = 100;
+    fill.style.width = p + '%';
+    txt.textContent = stages[Math.min(Math.floor(p/34), 3)];
+    if(p >= 100) {
+      clearInterval(iv);
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        setTimeout(() => loader.remove(), 700);
+      }, 350);
+    }
+  }, 90);
+})();
+</script>
+</body>
+</html>
