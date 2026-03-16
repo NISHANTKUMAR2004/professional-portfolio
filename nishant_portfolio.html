@@ -52,8 +52,9 @@ section{position:relative;z-index:1}
 .hero-pill-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:pdot 2s infinite}
 @keyframes pdot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.5);opacity:.3}}
 .hero-name{font-size:clamp(52px,9vw,128px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:20px}
-.hero-name .line1{background:linear-gradient(135deg,#00d4ff 0%,#8b5cf6 50%,#e040fb 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(0,212,255,.25))}
-.hero-name .line2{color:#e2e8f0}
+.hero-name .line1{display:block;filter:drop-shadow(0 0 30px rgba(0,212,255,.25))}
+.hero-name .line1 .t-letter{background:linear-gradient(135deg,#00d4ff 0%,#8b5cf6 50%,#e040fb 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#00d4ff}
+.hero-name .line2{color:#e2e8f0;display:block}
 .hero-sub{font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.6vw,16px);color:#00d4ff;letter-spacing:.14em;margin-bottom:14px;opacity:.8}
 .hero-tag{font-size:clamp(15px,2vw,19px);color:#94a3b8;max-width:540px;margin:0 auto 44px;line-height:1.7;font-weight:400}
 
@@ -469,7 +470,7 @@ function Hero() {
   return (
     <section id="hero" className="hero">
       <div style={{position:'relative',zIndex:2,maxWidth:'860px',margin:'0 auto'}}>
-        <div className="hero-pill"><div className="hero-pill-dot"/>&nbsp;Available for Opportunities</div>
+        <div className="hero-pill"><div className="hero-pill-dot"/> Available for Opportunities</div>
         <h1 className="hero-name">
           <div className="line1"><TypedName text="Nishant" baseDelay={200} delayStep={80}/></div>
           <div className="line2"><TypedName text="Kumar" baseDelay={900} delayStep={80}/></div>

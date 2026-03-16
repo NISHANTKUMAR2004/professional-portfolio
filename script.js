@@ -135,7 +135,7 @@ function Hero() {
   return (
     <section id="hero" className="hero">
       <div style={{position:'relative',zIndex:2,maxWidth:'860px',margin:'0 auto'}}>
-        <div className="hero-pill"><div className="hero-pill-dot"/>&nbsp;Available for ML Projects</div>
+        <div className="hero-pill"><div className="hero-pill-dot"/> Available for Opportunities</div>
         <h1 className="hero-name">
           <div className="line1">Nishant</div>
           <div className="line2">Kumar</div>
