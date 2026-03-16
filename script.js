@@ -135,7 +135,6 @@ function Hero() {
   return (
     <section id="hero" className="hero">
       <div style={{position:'relative',zIndex:2,maxWidth:'860px',margin:'0 auto'}}>
-        <img src="profile.jpg" alt="Nishant Kumar" className="hero-image" />
         <div className="hero-pill"><div className="hero-pill-dot"/>&nbsp;Available for ML Projects</div>
         <h1 className="hero-name">
           <div className="line1">Nishant</div>
@@ -426,21 +425,25 @@ function Contact() {
         </Reveal>
         <Reveal delay={100}>
           <div className="contact-card">
+            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+              <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="bot-field" style={{display:'none'}} />
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
-              <div className="input-wrap"><label>Name</label><input type="text" placeholder="Your name"/></div>
-              <div className="input-wrap"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+              <div className="input-wrap"><label>Name</label><input type="text" name="name" placeholder="Your name"/></div>
+              <div className="input-wrap"><label>Email</label><input type="email" name="email" placeholder="you@example.com"/></div>
             </div>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
-              <div className="input-wrap"><label>Phone</label><input type="tel" placeholder="+1 (555) 123-4567"/></div>
-              <div className="input-wrap"><label>Subject</label><input type="text" placeholder="Opportunity / Collaboration / Hello"/></div>
+              <div className="input-wrap"><label>Phone</label><input type="tel" name="phone" placeholder="+1 (555) 123-4567"/></div>
+              <div className="input-wrap"><label>Subject</label><input type="text" name="subject" placeholder="Opportunity / Collaboration / Hello"/></div>
             </div>
-            <div className="input-wrap"><label>Message</label><textarea rows="5" placeholder="Tell me about what you're building..."/></div>
+            <div className="input-wrap"><label>Message</label><textarea name="message" rows="5" placeholder="Tell me about what you're building..."/></div>
             <div style={{display:'flex',gap:'14px',alignItems:'center',flexWrap:'wrap',marginTop:'4px'}}>
-              <button onClick={()=>{setSent(true);setTimeout(()=>setSent(false),3000);}} className="btn-primary" style={{border:'none'}}>
-                {sent ? 'Sent! ✓' : 'Send Message →'}
+              <button type="submit" className="btn-primary" style={{border:'none',cursor:'pointer'}}>
+                Send Message →
               </button>
               <a href={`mailto:${DATA.email}`} className="btn-ghost">{DATA.email}</a>
             </div>
+            </form>
           </div>
         </Reveal>
         <Reveal delay={160}>

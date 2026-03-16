@@ -37,7 +37,7 @@ body{font-family:'Outfit',sans-serif;background:#050814;color:#e2e8f0;overflow-x
 /* ── Nav ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
 .nav.scrolled{background:rgba(5,8,20,.82);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,212,255,.08);box-shadow:0 2px 24px rgba(0,0,0,.5)}
-.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em}
 .nav-links{display:flex;gap:32px;list-style:none}
 .nav-links a{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b;text-decoration:none;transition:color .25s;cursor:none;position:relative}
 .nav-links a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;background:linear-gradient(90deg,#00d4ff,#8b5cf6);transition:width .3s}
@@ -52,7 +52,7 @@ section{position:relative;z-index:1}
 .hero-pill-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:pdot 2s infinite}
 @keyframes pdot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.5);opacity:.3}}
 .hero-name{font-size:clamp(52px,9vw,128px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:20px}
-.hero-name .line1{background:linear-gradient(135deg,#00d4ff 0%,#8b5cf6 50%,#e040fb 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(0,212,255,.25))}
+.hero-name .line1{background:linear-gradient(135deg,#00d4ff 0%,#8b5cf6 50%,#e040fb 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(0,212,255,.25))}
 .hero-name .line2{color:#e2e8f0}
 .hero-sub{font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.6vw,16px);color:#00d4ff;letter-spacing:.14em;margin-bottom:14px;opacity:.8}
 .hero-tag{font-size:clamp(15px,2vw,19px);color:#94a3b8;max-width:540px;margin:0 auto 44px;line-height:1.7;font-weight:400}
@@ -69,13 +69,13 @@ section{position:relative;z-index:1}
 .sec-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:#00d4ff;margin-bottom:10px;display:flex;align-items:center;gap:10px}
 .sec-label::before{content:'';width:24px;height:2px;background:linear-gradient(90deg,#00d4ff,#8b5cf6);border-radius:2px;box-shadow:0 0 6px #00d4ff88}
 .sec-title{font-size:clamp(34px,5vw,60px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:12px;color:#e2e8f0}
-.grad-text{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grad-text{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .sec-sub{color:#64748b;font-size:16px;line-height:1.7;max-width:460px}
 
 /* ── About ── */
 .about-grid{display:grid;grid-template-columns:1fr 1.7fr;gap:48px;align-items:start}
 .avatar-card{background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.1));border:1px solid rgba(0,212,255,.2);border-radius:28px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;overflow:hidden;max-width:320px;box-shadow:0 0 40px rgba(0,212,255,.1)}
-.avatar-initials{font-size:64px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.avatar-initials{font-size:64px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .stat-chip{background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:14px 20px;text-align:center;box-shadow:0 0 16px rgba(0,0,0,.3)}
 .stat-num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;line-height:1}
 .skill-row{margin-bottom:18px}
@@ -91,13 +91,13 @@ section{position:relative;z-index:1}
 @keyframes ring-spin{0%{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb)}33%{background:linear-gradient(225deg,#8b5cf6,#e040fb,#00d4ff)}66%{background:linear-gradient(315deg,#e040fb,#00d4ff,#8b5cf6)}100%{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb)}}
 .profile-photo-inner{width:100%;height:100%;border-radius:24px;background:transparent;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;position:relative}
 .profile-photo-inner img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;border-radius:0}
-.profile-photo-placeholder{font-size:100px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;user-select:none;line-height:1}
+.profile-photo-placeholder{font-size:100px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;user-select:none;line-height:1}
 .profile-status{display:inline-flex;align-items:center;gap:8px;padding:7px 20px;border-radius:100px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#00d4ff;box-shadow:0 0 18px rgba(0,212,255,.12)}
 .profile-status-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:pdot 2s infinite;flex-shrink:0}
 .profile-info{display:flex;flex-direction:column;gap:0}
 .profile-greeting{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#00d4ff;margin-bottom:10px;opacity:.8}
 .profile-name{font-size:clamp(40px,6vw,76px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:14px}
-.profile-name .pn1{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.profile-name .pn1{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .profile-name .pn2{color:#e2e8f0}
 .profile-role{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,1.4vw,15px);color:#8b5cf6;letter-spacing:.12em;margin-bottom:16px;opacity:.85}
 .profile-bio{color:#94a3b8;font-size:16px;line-height:1.75;margin-bottom:32px;max-width:480px}
@@ -174,7 +174,7 @@ footer{padding:32px 48px;border-top:1px solid rgba(255,255,255,.05);display:flex
 
 /* ── Loader ── */
 #loader{position:fixed;inset:0;background:linear-gradient(135deg,#050814,#0a0f1e);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .6s}
-.loader-logo{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em}
+.loader-logo{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em}
 .loader-track{width:200px;height:3px;background:rgba(0,212,255,.1);border-radius:3px;overflow:hidden}
 .loader-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#8b5cf6,#e040fb);width:0%;transition:width .05s linear;border-radius:3px;box-shadow:0 0 10px #00d4ff}
 .loader-txt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;color:#00d4ff;opacity:.6}
@@ -220,6 +220,22 @@ footer{padding:32px 48px;border-top:1px solid rgba(255,255,255,.05);display:flex
   <div class="loader-txt" id="ltxt">LOADING</div>
 </div>
 
+<!-- ============================================================
+     NETLIFY FORMS — Static HTML twin (required for detection).
+     Netlify scans HTML at deploy-time, NOT at JS runtime.
+     This hidden form tells Netlify the form exists & its fields.
+     The actual visible form is rendered by React below.
+     ============================================================ -->
+<form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="contact" />
+  <input type="text"  name="name" />
+  <input type="email" name="email" />
+  <input type="tel"   name="phone" />
+  <input type="text"  name="subject" />
+  <textarea           name="message"></textarea>
+  <input type="text"  name="bot-field" />
+</form>
+
 <div id="root"></div>
 
 <script type="text/babel">
@@ -241,7 +257,7 @@ const DATA = {
   phone: "+91 9931518514",
   linkedin: "https://www.linkedin.com/in/nishantkumar02/",
   github: "https://github.com/NISHANTKUMAR2004",
-  resume: "https://drive.google.com/file/d/YOUR_RESUME_FILE_ID/view", // Update with your resume link
+  resume: "./nishant_latest_resume.pdf",
   services: [
     { icon: "💻", title: "Full Stack Development", desc: "Building end-to-end web applications with modern frameworks like React, Node.js, and databases." },
     { icon: "🤖", title: "Machine Learning", desc: "Developing intelligent systems using Python, Scikit-learn, and data analysis for predictive models." },
@@ -322,7 +338,7 @@ function SkillBar({ label, pct, color }) {
   return (
     <div className="skill-row" ref={ref}>
       <div className="skill-label">
-        <span style={{color:'#334155'}}>{label}</span>
+        <span style={{color:'#cbd5e1'}}>{label}</span>
         <span style={{fontFamily:'JetBrains Mono',fontSize:'12px',color}}>{pct}%</span>
       </div>
       <div className="skill-track">
@@ -367,7 +383,7 @@ function ProfileCard() {
   /* Replace the src below with your actual hosted photo URL.
      e.g. src="https://i.imgur.com/yourphoto.jpg"
      Leave src="" to show the NK initials placeholder. */
-  const photoSrc = "https://i.imgur.com/yourphoto.jpg"; // Update with your hosted photo URL
+  const photoSrc = "./portfolio-pic-removebg-preview.png";
   return (
     <section id="profile" className="profile-sec">
       <div className="profile-inner">
@@ -384,10 +400,6 @@ function ProfileCard() {
           <div className="profile-status">
             <div className="profile-status-dot"/>
             &nbsp;Open to Work
-          </div>
-          <div className="profile-upload-hint">
-            Set <code style={{color:'#00d4ff',fontSize:'9px'}}>photoSrc</code> in HTML
-            to display your photo here.
           </div>
         </div>
         {/* ── Right: Info ── */}
@@ -414,12 +426,12 @@ function ProfileCard() {
           {/* CTA Buttons */}
           <div className="profile-actions">
             <a href="#projects" className="btn-primary">View Projects →</a>
-            <a href={DATA.resume} target="_blank" className="btn-ghost">Download Resume 📄</a>
+            <a href={DATA.resume} target="_blank" rel="noopener noreferrer" className="btn-ghost">Download Resume 📄</a>
           </div>
           {/* Socials */}
           <div className="profile-socials">
-            <a href={DATA.linkedin} target="_blank" className="psoc">🔗 LinkedIn</a>
-            <a href={DATA.github} target="_blank" className="psoc">🐙 GitHub</a>
+            <a href={DATA.linkedin} target="_blank" rel="noopener noreferrer" className="psoc">🔗 LinkedIn</a>
+            <a href={DATA.github} target="_blank" rel="noopener noreferrer" className="psoc">🐙 GitHub</a>
             <a href={`mailto:${DATA.email}`} className="psoc">✉️ Email</a>
             <a href={`tel:${DATA.phone}`} className="psoc">📞 Phone</a>
           </div>
@@ -490,8 +502,8 @@ function About() {
                 <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at 40% 30%,rgba(0,212,255,.15),transparent 70%)'}}/>
               </div>
               <div style={{display:'flex',gap:'12px',marginTop:'20px',flexWrap:'wrap'}}>
-                <a href={DATA.linkedin} target="_blank" className="social-link">LinkedIn</a>
-                <a href={DATA.github} target="_blank" className="social-link">GitHub</a>
+                <a href={DATA.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">LinkedIn</a>
+                <a href={DATA.github} target="_blank" rel="noopener noreferrer" className="social-link">GitHub</a>
                 <a href={`mailto:${DATA.email}`} className="social-link">Email</a>
               </div>
               <div style={{display:'flex',gap:'12px',marginTop:'18px',flexWrap:'wrap'}}>
@@ -534,7 +546,7 @@ function Resume() {
         </Reveal>
         <Reveal delay={100}>
           <div style={{display:'flex',justifyContent:'center'}}>
-            <a href={DATA.resume} target="_blank" className="btn-primary" style={{fontSize:'16px',padding:'16px 32px'}}>Download Resume 📄</a>
+            <a href={DATA.resume} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{fontSize:'16px',padding:'16px 32px'}}>Download Resume 📄</a>
           </div>
         </Reveal>
       </div>
@@ -596,7 +608,7 @@ function Projects() {
                   <p style={{color:'#94a3b8',fontSize:'14px',lineHeight:'1.7',marginBottom:'16px'}}>{p.desc}</p>
                   <div style={{marginBottom:'20px'}}>{p.tags.map(t => <span key={t} className="proj-tag">{t}</span>)}</div>
                   <div style={{display:'flex',gap:'10px'}}>
-                    <a href={p.github} target="_blank" className="btn-ghost" style={{fontSize:'11px',padding:'9px 18px'}}>GitHub →</a>
+                    <a href={p.github} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{fontSize:'11px',padding:'9px 18px'}}>GitHub →</a>
                     <a href="#" className="social-link" style={{fontSize:'11px',padding:'9px 18px'}}>Live Demo</a>
                   </div>
                 </div>
@@ -745,7 +757,9 @@ function Contact() {
         </Reveal>
         <Reveal delay={100}>
           <div className="contact-card">
-            <form name="contact" method="POST" netlify="true" style={{display:'contents'}}>
+            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" style={{display:'contents'}}>
+              <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="bot-field" style={{display:'none'}} />
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
                 <div className="input-wrap"><label>Name</label><input type="text" name="name" placeholder="Your name" required/></div>
                 <div className="input-wrap"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required/></div>
@@ -766,8 +780,8 @@ function Contact() {
         </Reveal>
         <Reveal delay={160}>
           <div style={{display:'flex',gap:'12px',flexWrap:'wrap',justifyContent:'center',marginTop:'28px'}}>
-            <a href={DATA.linkedin} target="_blank" className="social-link">LinkedIn</a>
-            <a href={DATA.github} target="_blank" className="social-link">GitHub</a>
+            <a href={DATA.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">LinkedIn</a>
+            <a href={DATA.github} target="_blank" rel="noopener noreferrer" className="social-link">GitHub</a>
             <a href={`mailto:${DATA.email}`} className="social-link">Email</a>
             <a href={`tel:${DATA.phone}`} className="social-link">{DATA.phone}</a>
           </div>
@@ -782,8 +796,8 @@ function Footer() {
     <footer>
       <div className="footer-copy" style={{color:'#475569',fontSize:'13px'}}>© 2026 Nishant Kumar — Built with React & passion.</div>
       <div style={{display:'flex',gap:'10px'}}>
-        <a href={DATA.linkedin} target="_blank" className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>LinkedIn</a>
-        <a href={DATA.github} target="_blank" className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>GitHub</a>
+        <a href={DATA.linkedin} target="_blank" rel="noopener noreferrer" className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>LinkedIn</a>
+        <a href={DATA.github} target="_blank" rel="noopener noreferrer" className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>GitHub</a>
         <a href={`mailto:${DATA.email}`} className="social-link" style={{padding:'7px 14px',fontSize:'11px'}}>Email</a>
       </div>
     </footer>
