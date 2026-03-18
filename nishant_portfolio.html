@@ -31,8 +31,9 @@ body{font-family:'Outfit',sans-serif;background:#050814;color:#e2e8f0;overflow-x
 .aurora-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
 
 /* ── Progress Bar ── */
-.progress-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9999;background:rgba(255,255,255,.05)}
-.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#8b5cf6,#e040fb);width:0%;transition:width .1s;box-shadow:0 0 8px #00d4ff}
+.progress-bar{position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background:rgba(255,255,255,.03);backdrop-filter:blur(4px);}
+.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#8b5cf6,#e040fb);width:0%;transition:width .15s ease-out;box-shadow:0 0 14px #00d4ff, 0 0 24px #e040fb;position:relative;}
+.progress-fill::after{content:'';position:absolute;right:0;top:50%;width:8px;height:8px;background:#fff;border-radius:50%;box-shadow:0 0 10px #fff, 0 0 20px #e040fb;transform:translate(50%,-50%);}
 
 /* ── Nav ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
@@ -75,14 +76,22 @@ section{position:relative;z-index:1}
 
 /* ── About ── */
 .about-grid{display:grid;grid-template-columns:1fr 1.7fr;gap:48px;align-items:start}
-.avatar-card{background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.1));border:1px solid rgba(0,212,255,.2);border-radius:28px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;overflow:hidden;max-width:320px;box-shadow:0 0 40px rgba(0,212,255,.1)}
-.avatar-initials{font-size:64px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.avatar-card{background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.1));border:1px solid rgba(0,212,255,.2);border-radius:28px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;max-width:320px;box-shadow:0 0 40px rgba(0,212,255,.15)}
+.avatar-img-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .8s cubic-bezier(.23,1,.32,1);z-index:0;}
+.avatar-card:hover .avatar-img-bg{transform:scale(1.08);}
 .stat-chip{background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:14px 20px;text-align:center;box-shadow:0 0 16px rgba(0,0,0,.3)}
 .stat-num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;line-height:1}
-.skill-row{margin-bottom:18px}
-.skill-label{display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-bottom:8px;color:#cbd5e1}
-.skill-track{height:5px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
-.skill-fill{height:100%;border-radius:5px;width:0%;transition:width 1.4s cubic-bezier(.25,1,.5,1);box-shadow:0 0 8px currentColor}
+.skill-row{margin-bottom:28px; position:relative; cursor:none;}
+.skill-label{display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-bottom:10px;color:#e2e8f0;transition:all .3s ease;}
+.skill-row:hover .skill-label{color:#fff; transform:translateY(-2px); text-shadow:0 0 10px rgba(255,255,255,.3);}
+.skill-track{height:8px;background:rgba(255,255,255,.04);border-radius:10px;position:relative;border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 3px rgba(0,0,0,.5);}
+.skill-fill{height:100%;border-radius:10px;width:0%;transition:width 1.5s cubic-bezier(.22,1,.36,1);position:relative;}
+.skill-fill::after{content:'';position:absolute;right:0;top:50%;transform:translate(50%,-50%);width:14px;height:14px;background:var(--c);border-radius:50%;box-shadow:0 0 14px var(--c), 0 0 24px var(--c);opacity:0;transition:opacity .5s ease 1.2s;pointer-events:none;filter:brightness(1.2)}
+.skill-fill.full::after{opacity:1;animation:pulse-dot 2s infinite alternate;}
+.skill-shimmer{position:absolute;inset:0;border-radius:10px;overflow:hidden;}
+.skill-shimmer::before{content:'';position:absolute;top:0;bottom:0;left:-100%;width:50%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2.5s infinite linear;}
+@keyframes pulse-dot{0%{transform:translate(50%,-50%) scale(.8)}100%{transform:translate(50%,-50%) scale(1.3)}}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
 
 /* ── Profile Section ── */
 .profile-sec{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 40px 80px;position:relative;z-index:1}
@@ -91,14 +100,14 @@ section{position:relative;z-index:1}
 .profile-photo-ring{width:280px;height:340px;border-radius:28px;padding:4px;background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);position:relative;box-shadow:0 0 60px rgba(0,212,255,.35),0 0 120px rgba(139,92,246,.18);flex-shrink:0;animation:ring-spin 6s linear infinite}
 @keyframes ring-spin{0%{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb)}33%{background:linear-gradient(225deg,#8b5cf6,#e040fb,#00d4ff)}66%{background:linear-gradient(315deg,#e040fb,#00d4ff,#8b5cf6)}100%{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb)}}
 .profile-photo-inner{width:100%;height:100%;border-radius:24px;background:transparent;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;position:relative}
-.profile-photo-inner img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;border-radius:0}
+.profile-photo-inner img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:0}
 .profile-photo-placeholder{font-size:100px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;user-select:none;line-height:1}
 .profile-status{display:inline-flex;align-items:center;gap:8px;padding:7px 20px;border-radius:100px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#00d4ff;box-shadow:0 0 18px rgba(0,212,255,.12)}
 .profile-status-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:pdot 2s infinite;flex-shrink:0}
 .profile-info{display:flex;flex-direction:column;gap:0}
 .profile-greeting{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#00d4ff;margin-bottom:10px;opacity:.8}
 .profile-name{font-size:clamp(40px,6vw,76px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:14px}
-.profile-name .pn1{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.profile-name .pn1 .t-letter{background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#00d4ff}
 .profile-name .pn2{color:#e2e8f0}
 .profile-role{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,1.4vw,15px);color:#8b5cf6;letter-spacing:.12em;margin-bottom:16px;opacity:.85}
 .profile-bio{color:#94a3b8;font-size:16px;line-height:1.75;margin-bottom:32px;max-width:480px}
@@ -117,10 +126,24 @@ section{position:relative;z-index:1}
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px}
 .proj-card{background:rgba(255,255,255,.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);border-radius:24px;overflow:hidden;transition:transform .35s ease,box-shadow .35s ease,border-color .35s;cursor:none;box-shadow:0 4px 30px rgba(0,0,0,.5)}
 .proj-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 0 40px rgba(0,212,255,.12),0 24px 60px rgba(0,0,0,.6);border-color:rgba(0,212,255,.3)}
-.proj-hero{height:160px;display:flex;align-items:center;justify-content:center;font-size:54px;position:relative}
-.proj-badge{position:absolute;top:12px;right:12px;padding:4px 12px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;font-weight:600;backdrop-filter:blur(8px)}
+.proj-hero{height:160px;display:flex;align-items:flex-start;justify-content:flex-end;position:relative;overflow:hidden;padding:12px}
+.proj-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s ease;z-index:0}
+.proj-card:hover .proj-hero-bg{transform:scale(1.1)}
+.proj-hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom, rgba(5,8,20,0.1), rgba(5,8,20,0.6))}
+.proj-badge{position:relative;z-index:1;padding:4px 12px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;font-weight:600;backdrop-filter:blur(8px);background:rgba(255,255,255,.1)!important;color:#fff!important;border:1px solid rgba(255,255,255,.2);box-shadow:0 4px 10px rgba(0,0,0,0.3)}
 .proj-body{padding:26px}
 .proj-tag{display:inline-flex;padding:3px 10px;border-radius:100px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.18);font-size:10px;font-weight:600;color:#00d4ff;letter-spacing:.04em;margin:3px 2px}
+
+/* ── Resume ── */
+.resume-box{position:relative;margin:0 auto;max-width:720px;padding:60px 40px;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);backdrop-filter:blur(30px);border-radius:32px;border:1px solid rgba(255,255,255,.07);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);overflow:hidden;}
+.resume-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(0,212,255,.5),rgba(139,92,246,.5),transparent 40%);animation:spin 8s linear infinite;z-index:0;}
+.resume-box::after{content:'';position:absolute;inset:2px;background:#050814;border-radius:30px;z-index:1;}
+.resume-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
+.btn-premium{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:20px 48px;border-radius:100px;background:linear-gradient(135deg,#00d4ff,#8b5cf6,#e040fb);background-size:200% auto;color:#fff;font-size:16px;font-weight:700;letter-spacing:.05em;text-decoration:none;box-shadow:0 0 30px rgba(139,92,246,.4),inset 0 2px 10px rgba(255,255,255,.3);transition:all .4s ease;overflow:hidden;cursor:none;}
+.btn-premium:hover{background-position:right center;transform:scale(1.05);box-shadow:0 0 50px rgba(0,212,255,.6),inset 0 2px 10px rgba(255,255,255,.5);color:#fff;}
+.btn-premium::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);transition:none;}
+.btn-premium:hover::before{left:200%;transition:left .8s ease;}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── Certs ── */
 .cert-scroll{display:flex;gap:20px;overflow-x:auto;padding:8px 0 20px;scrollbar-width:thin;scrollbar-color:rgba(0,212,255,.2) transparent}
@@ -129,12 +152,27 @@ section{position:relative;z-index:1}
 .cert-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
 
 /* ── Skills ── */
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
-.skill-group{background:rgba(255,255,255,.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(0,0,0,.4);transition:border-color .3s,box-shadow .3s}
-.skill-group:hover{border-color:rgba(0,212,255,.2);box-shadow:0 0 28px rgba(0,212,255,.08)}
-.chip{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:13px;font-weight:600;margin-bottom:8px;transition:all .25s;cursor:none;color:#cbd5e1}
-.chip:hover{background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.3);color:#00d4ff;transform:translateX(5px);box-shadow:0 0 14px rgba(0,212,255,.15)}
-.chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+.skill-group{background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,transparent 100%);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.15);border-radius:24px;padding:32px;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:all .4s cubic-bezier(.23,1,.32,1);position:relative;overflow:hidden;}
+.skill-group::before{content:'';position:absolute;inset:0;background:radial-gradient(800px circle at top left, var(--c), transparent 40%);opacity:0.08;transition:opacity .4s;pointer-events:none;}
+.skill-group::after{content:'';position:absolute;top:0;left:20%;width:60%;height:100%;background:var(--c);filter:blur(60px);opacity:0;transition:opacity .4s;z-index:-1;}
+.skill-group:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.15);box-shadow:0 20px 40px rgba(0,0,0,.6);}
+.skill-group:hover::after{opacity:0.15;}
+.sg-header{display:flex;align-items:center;gap:16px;margin-bottom:26px;position:relative;}
+.sg-icon-wrap{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 2px 10px rgba(255,255,255,.05), 0 8px 20px rgba(0,0,0,.3);position:relative;}
+.sg-icon-wrap::before{content:'';position:absolute;inset:0;border-radius:16px;background:var(--c);opacity:0.15;}
+.sg-icon{font-size:24px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));}
+.sg-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;color:var(--c);margin-bottom:4px;font-weight:700;}
+.sg-title{font-size:20px;font-weight:800;color:#e2e8f0;letter-spacing:-.02em;}
+.sg-items{display:flex;flex-direction:column;gap:10px;position:relative;}
+.chip{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.04);font-size:14px;font-weight:600;color:#cbd5e1;transition:all .4s cubic-bezier(.23,1,.32,1);cursor:none;position:relative;overflow:hidden;box-shadow:inset 0 1px 2px rgba(255,255,255,.02);}
+.chip::before{content:'';position:absolute;inset:0;background:var(--c);opacity:0;transition:opacity .4s;}
+.chip::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:skewX(-20deg);transition:none;}
+.chip:hover{transform:translateX(8px) scale(1.02);border-color:rgba(255,255,255,.1);color:#fff;background:rgba(0,0,0,.4);box-shadow: 0 4px 12px rgba(0,0,0,.3);}
+.chip:hover::before{opacity:0.15;}
+.chip:hover::after{left:200%;transition:left .7s ease-in-out;}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);position:relative;transition:all .4s;}
+.chip:hover .chip-dot{box-shadow:0 0 16px var(--c), 0 0 30px var(--c);transform:scale(1.2);}
 
 /* ── Timeline ── */
 .timeline{max-width:680px;margin:0 auto;position:relative}
@@ -186,8 +224,8 @@ footer{padding:32px 48px;border-top:1px solid rgba(255,255,255,.05);display:flex
 @keyframes glowpulse{0%,100%{box-shadow:0 0 6px #00d4ff,0 0 14px #00d4ff44}50%{box-shadow:0 0 14px #00d4ff,0 0 30px #00d4ff66}}
 
 /* ── Letter-by-letter name animation ── */
-@keyframes letter-rise{0%{opacity:0;transform:translateY(32px) scale(.75);filter:blur(8px)}55%{opacity:1;transform:translateY(-5px) scale(1.06);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-.typed-name .t-letter{display:inline-block;opacity:0;animation:letter-rise .6s cubic-bezier(.23,1,.32,1) forwards}
+@keyframes letter-rise{0%,100%{opacity:0;transform:translateY(32px) scale(.75);filter:blur(8px)}12%{opacity:1;transform:translateY(-5px) scale(1.06);filter:blur(0)}16%,84%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}95%{opacity:0;transform:translateY(-12px) scale(.95);filter:blur(5px)}}
+.typed-name .t-letter{display:inline-block;opacity:0;animation:letter-rise 5s cubic-bezier(.23,1,.32,1) infinite}
 .typed-name .t-space{display:inline-block;width:.25em}
 
 @media(max-width:768px){
@@ -260,14 +298,14 @@ const DATA = {
   github: "https://github.com/NISHANTKUMAR2004",
   resume: "./nishant_latest_resume.pdf",
   services: [
-    { icon: "💻", title: "Full Stack Development", desc: "Building end-to-end web applications with modern frameworks like React, Node.js, and databases." },
-    { icon: "🤖", title: "Machine Learning", desc: "Developing intelligent systems using Python, Scikit-learn, and data analysis for predictive models." },
-    { icon: "🔧", title: "API Development", desc: "Designing and implementing RESTful APIs with authentication, security, and scalability in mind." },
-    { icon: "📊", title: "Data Analysis", desc: "Analyzing datasets, uncovering patterns, and visualizing insights with Pandas and Matplotlib." }
+    { image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80", title: "Full Stack Development", desc: "Building end-to-end web applications with modern frameworks like React, Node.js, and databases." },
+    { image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80", title: "Machine Learning", desc: "Developing intelligent systems using Python, Scikit-learn, and data analysis for predictive models." },
+    { image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80", title: "API Development", desc: "Designing and implementing RESTful APIs with authentication, security, and scalability in mind." },
+    { image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", title: "Data Analysis", desc: "Analyzing datasets, uncovering patterns, and visualizing insights with Pandas and Matplotlib." }
   ],
   projects: [
     {
-      emoji: "🚨", title: "ReliefSync", date: "JAN 2026",
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80", title: "ReliefSync", date: "JAN 2026",
       desc: "Smart disaster response coordination platform — real-time resource allocation, relief tracking, and multi-team coordination for emergencies.",
       tags: ["React.js","Node.js","Express.js","PostgreSQL","JWT"],
       color: "linear-gradient(135deg,rgba(0,212,255,.14),rgba(139,92,246,.1))",
@@ -275,7 +313,7 @@ const DATA = {
       github: "https://github.com/NISHANTKUMAR2004",
     },
     {
-      emoji: "🌧️", title: "Rainfall Pattern Analysis", date: "NOV 2025",
+      image: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&q=80", title: "Rainfall Pattern Analysis", date: "NOV 2025",
       desc: "Unsupervised ML system for uncovering hidden rainfall patterns. K-Means & hierarchical clustering on historical climate data with full visualization.",
       tags: ["Python","Scikit-learn","Pandas","Matplotlib","Jupyter"],
       color: "linear-gradient(135deg,rgba(139,92,246,.14),rgba(224,64,251,.08))",
@@ -283,7 +321,7 @@ const DATA = {
       github: "https://github.com/NISHANTKUMAR2004",
     },
     {
-      emoji: "🎯", title: "Recommendation Engine", date: "OCT 2025",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", title: "Recommendation Engine", date: "OCT 2025",
       desc: "Intelligent content recommendation system using collaborative & content-based filtering. Delivers personalized suggestions with high precision using user behavior analysis.",
       tags: ["Python","Scikit-learn","Pandas","Flask","Cosine Similarity"],
       color: "linear-gradient(135deg,rgba(6,182,212,.14),rgba(16,185,129,.1))",
@@ -291,7 +329,7 @@ const DATA = {
       github: "https://github.com/NISHANTKUMAR2004",
     },
     {
-      emoji: "🧠", title: "NLP Toxic Speech Analysis", date: "DEC 2025",
+      image: "https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?w=800&q=80", title: "NLP Toxic Speech Analysis", date: "DEC 2025",
       desc: "Natural Language Processing system to detect and classify toxic speech. Multi-label classification using TF-IDF vectorization and ML pipelines for hate speech detection.",
       tags: ["Python","NLP","TF-IDF","Scikit-learn","Pandas"],
       color: "linear-gradient(135deg,rgba(239,68,68,.14),rgba(249,115,22,.1))",
@@ -300,11 +338,10 @@ const DATA = {
     },
   ],
   certs: [
-    { icon:"☁️", org:"ORACLE", title:"Generative AI Professional", date:"Sept 2025", color:"#f97316", bg:"rgba(249,115,22,.1)" },
-    { icon:"🌐", org:"GOOGLE", title:"Bits and Bytes of Computer Networking", date:"Apr 2024", color:"#4285f4", bg:"rgba(66,133,244,.1)" },
-    { icon:"🖥️", org:"IBM", title:"Introduction to Hardware & Operating Systems", date:"Aug 2024", color:"#0062ff", bg:"rgba(0,98,255,.1)" },
-    { icon:"📡", org:"UNIV. OF COLORADO", title:"Fundamentals of Network Communication", date:"Nov 2024", color:"#f59e0b", bg:"rgba(245,158,11,.1)" },
-    { icon:"⛅", org:"AWS", title:"AWS Cloud Practitioner", date:"Oct 2024", color:"#ff9900", bg:"rgba(255,153,0,.1)" },
+    { image:"https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&q=80", link:"https://www.coursera.org/account/accomplishments/verify/QCOENH8GIGGI", org:"GOOGLE / COURSERA", title:"Bits and Bytes of Computer Networking", date:"Apr 2024", color:"#4285f4", bg:"rgba(66,133,244,.1)" },
+    { image:"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&q=80", link:"https://catalog-education.oracle.com/ords/certview/sharebadge?id=B4260AAD57257777692FD3BA84A48C44E0E72DE8AC61BBDFBFB481677B1D818A", org:"ORACLE", title:"Generative AI Professional", date:"Sept 2025", color:"#f97316", bg:"rgba(249,115,22,.1)" },
+    { image:"https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?w=400&q=80", link:"https://www.coursera.org/account/accomplishments/verify/34QJAEYUCE5N", org:"IBM / COURSERA", title:"Introduction to Hardware & Operating System", date:"Aug 2024", color:"#0062ff", bg:"rgba(0,98,255,.1)" },
+    { image:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80", link:"./Cloud Computing.pdf", org:"NPTEL / IIT KGP", title:"Cloud Computing", date:"Recent", color:"#10b981", bg:"rgba(16,185,129,.1)" }
   ],
   skillGroups: [
     { label:"Languages", icon:"⚙️", color:"#7c3aed", items:["C++","Python","Java","C","JavaScript"] },
@@ -316,34 +353,56 @@ const DATA = {
   ],
   timeline: [
     { icon:"🎓", color:"rgba(124,58,237,.15)", dateColor:"#7c3aed", date:"AUG 2023 – PRESENT", title:"B.Tech Computer Science Engineering", org:"Lovely Professional University, Phagwara", orgColor:"#7c3aed", detail:"Specializing in full-stack development, algorithms, and ML systems." },
-    { icon:"💼", color:"rgba(236,72,153,.12)", dateColor:"#ec4899", date:"JUN 2025 – JUL 2025", title:"Training — DSA with C++", org:"Center of Professional Enhancement, LPU", orgColor:"#ec4899", detail:"Arrays, linked lists, trees, graphs, recursion, sorting, DP — intensive problem solving." },
-    { icon:"📐", color:"rgba(249,115,22,.12)", dateColor:"#f97316", date:"MAR 2022 – MAY 2023", title:"Intermediate (PCM) — 82%", org:"B.B.M College, Jehanabad, Bihar", orgColor:"#f97316", detail:"Physics, Chemistry, Mathematics — strong academic foundation." },
-    { icon:"🏫", color:"rgba(245,158,11,.12)", dateColor:"#f59e0b", date:"MAR 2019 – MAY 2020", title:"Matriculation — 94.8%", org:"D.A.V School, Patna, Bihar", orgColor:"#f59e0b", detail:"Exceptional academic performance — the foundation of a technical career." },
+    { icon:"📐", color:"rgba(249,115,22,.12)", dateColor:"#f97316", date:"MAR 2022 – MAY 2023", title:"Intermediate (PCM)", org:"B.B.M College, Jehanabad, Bihar", orgColor:"#f97316", detail:"Physics, Chemistry, Mathematics — strong academic foundation." },
+    { icon:"🏫", color:"rgba(245,158,11,.12)", dateColor:"#f59e0b", date:"MAR 2019 – MAY 2020", title:"Matriculation", org:"D.A.V School, Patna, Bihar", orgColor:"#f59e0b", detail:"Exceptional academic performance — the foundation of a technical career." },
   ],
   achievements: [
     { num:"1st", label:"Agentic AI Hackathon", sub:"Infenion Technologies", color:"#10b981" },
     { num:"500+", label:"DSA Problems", sub:"GeeksForGeeks", color:"#7c3aed" },
     { num:"3★", label:"HackerRank", sub:"Problem Solving", color:"#ec4899" },
-    { num:"94.8%", label:"Matriculation", sub:"D.A.V School", color:"#f59e0b" },
   ]
 };
 
 function SkillBar({ label, pct, color }) {
   const ref = useRef(null);
   const [w, setW] = useState(0);
+  const [count, setCount] = useState(0);
+
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting) setW(pct); }, { threshold: .2 });
+    const obs = new IntersectionObserver(([e]) => { 
+      if(e.isIntersecting) {
+        setW(pct);
+        let start = 0;
+        const duration = 1500;
+        const increment = pct / (duration / 16); 
+        const timer = setInterval(() => {
+          start += increment;
+          if (start >= pct) {
+            start = pct;
+            clearInterval(timer);
+          }
+          setCount(Math.floor(start));
+        }, 16);
+      } else {
+        setW(0);
+        setCount(0);
+      }
+    }, { threshold: .2 });
+    
     if(ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
-  }, []);
+  }, [pct]);
+
   return (
-    <div className="skill-row" ref={ref}>
+    <div className="skill-row" ref={ref} style={{'--c': color}}>
       <div className="skill-label">
-        <span style={{color:'#cbd5e1'}}>{label}</span>
-        <span style={{fontFamily:'JetBrains Mono',fontSize:'12px',color}}>{pct}%</span>
+        <span style={{color:'#cbd5e1', letterSpacing:'.04em'}}>{label}</span>
+        <span style={{fontFamily:'JetBrains Mono',fontSize:'13px',color, textShadow:`0 0 10px ${color}88`}}>{count}%</span>
       </div>
       <div className="skill-track">
-        <div className="skill-fill" style={{width:w+'%',background:`linear-gradient(90deg,${color},${color}88)`}}/>
+        <div className={`skill-fill ${w > 0 ? 'full' : ''}`} style={{width:w+'%', background:`linear-gradient(90deg, ${color}11, ${color})`, boxShadow:`0 0 16px ${color}55`}}>
+          <div className="skill-shimmer"></div>
+        </div>
       </div>
     </div>
   );
@@ -384,7 +443,7 @@ function ProfileCard() {
   /* Replace the src below with your actual hosted photo URL.
      e.g. src="https://i.imgur.com/yourphoto.jpg"
      Leave src="" to show the NK initials placeholder. */
-  const photoSrc = "./portfolio-pic-removebg-preview.png";
+  const photoSrc = "./profile-for-portfolio.jpeg";
   return (
     <section id="profile" className="profile-sec">
       <div className="profile-inner">
@@ -405,10 +464,10 @@ function ProfileCard() {
         </div>
         {/* ── Right: Info ── */}
         <div className="profile-info">
-          <div className="profile-greeting">Hello, I'm</div>
+          <div className="profile-greeting"><TypedName text="Hello, I'm" baseDelay={0} delayStep={60}/></div>
           <h1 className="profile-name">
-            <div className="pn1">Nishant</div>
-            <div className="pn2">Kumar</div>
+            <div className="pn1"><TypedName text="Nishant" baseDelay={600} delayStep={80}/></div>
+            <div className="pn2"><TypedName text="Kumar" baseDelay={1160} delayStep={80}/></div>
           </h1>
           <div className="profile-role">Full Stack Developer &nbsp;·&nbsp; ML Engineer &nbsp;·&nbsp; CSE @ LPU</div>
           <p className="profile-bio">
@@ -460,15 +519,22 @@ function TypedName({ text, className, baseDelay=0, delayStep=70 }) {
 
 function Hero() {
   const floats = [
-    {t:'React.js',s:{top:'20%',left:'5%'},d:0},
-    {t:'Node.js',s:{top:'28%',right:'6%'},d:0.4},
-    {t:'Python',s:{bottom:'30%',left:'8%'},d:0.8},
-    {t:'PostgreSQL',s:{bottom:'22%',right:'9%'},d:1.2},
-    {t:'C++',s:{top:'55%',left:'3%'},d:1.6},
-    {t:'ML/AI',s:{top:'16%',right:'16%'},d:2.0},
+    {t:'React.js',s:{top:'15%',left:'5vw'},d:0},
+    {t:'Node.js',s:{top:'20%',right:'8vw'},d:0.4},
+    {t:'Python',s:{bottom:'20%',left:'8vw'},d:0.8},
+    {t:'PostgreSQL',s:{bottom:'16%',right:'10vw'},d:1.2},
+    {t:'C++',s:{top:'50%',left:'4vw'},d:1.6},
+    {t:'ML/AI',s:{top:'55%',right:'6vw'},d:2.0},
   ];
   return (
     <section id="hero" className="hero">
+      <div style={{position:'absolute', inset:0, pointerEvents:'none', zIndex:1}}>
+        {floats.map(({t,s,d}) => (
+          <div key={t} style={{...s,position:'absolute',padding:'6px 14px',borderRadius:'100px',border:'1px solid rgba(0,212,255,.2)',background:'rgba(5,8,20,.6)',backdropFilter:'blur(12px)',fontSize:'12px',fontWeight:'600',color:'#00d4ff',animation:`float-t ${5.5+d*.7}s ease-in-out ${d}s infinite alternate`,boxShadow:'0 0 12px rgba(0,212,255,.1)'}}>
+            {t}
+          </div>
+        ))}
+      </div>
       <div style={{position:'relative',zIndex:2,maxWidth:'860px',margin:'0 auto'}}>
         <div className="hero-pill"><div className="hero-pill-dot"/> Available for Opportunities</div>
         <h1 className="hero-name">
@@ -481,11 +547,6 @@ function Hero() {
           <a href="#projects" className="btn-primary">View Projects →</a>
           <a href="#contact" className="btn-ghost">Get in Touch</a>
         </div>
-        {floats.map(({t,s,d}) => (
-          <div key={t} style={{...s,position:'absolute',padding:'6px 14px',borderRadius:'100px',border:'1px solid rgba(0,212,255,.2)',background:'rgba(5,8,20,.6)',backdropFilter:'blur(12px)',fontSize:'12px',fontWeight:'600',color:'#00d4ff',animation:`float-t ${5.5+d*.7}s ease-in-out ${d}s infinite alternate`,boxShadow:'0 0 12px rgba(0,212,255,.1)'}}>
-            {t}
-          </div>
-        ))}
       </div>
     </section>
   );
@@ -499,8 +560,8 @@ function About() {
           <div className="about-grid">
             <div>
               <div className="avatar-card">
-                <div className="avatar-initials">NK</div>
-                <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at 40% 30%,rgba(0,212,255,.15),transparent 70%)'}}/>
+                <div className="avatar-img-bg" style={{backgroundImage: "url('https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?w=800&q=80')"}}></div>
+                <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg, rgba(0,212,255,0.1), rgba(139,92,246,0.1))', mixBlendMode: 'overlay', zIndex:1, pointerEvents:'none'}}/>
               </div>
               <div style={{display:'flex',gap:'12px',marginTop:'20px',flexWrap:'wrap'}}>
                 <a href={DATA.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">LinkedIn</a>
@@ -520,7 +581,7 @@ function About() {
               <div className="sec-label">01 — About Me</div>
               <h2 className="sec-title">Crafting digital <span className="grad-text">experiences.</span></h2>
               <p style={{color:'#94a3b8',lineHeight:'1.8',marginBottom:'32px',fontSize:'16px'}}>
-                CSE student at Lovely Professional University (CGPA: 8.77) with a passion for building full-stack systems and ML-powered applications. From architecting REST APIs to training clustering models, I love the full spectrum — clean code, intelligent algorithms, and interfaces that feel alive.
+                CSE student at Lovely Professional University with a passion for building full-stack systems and ML-powered applications. From architecting REST APIs to training clustering models, I love the full spectrum — clean code, intelligent algorithms, and interfaces that feel alive.
               </p>
               <SkillBar label="Full Stack Development" pct={88} color="#7c3aed"/>
               <SkillBar label="Data Structures & Algorithms" pct={85} color="#ec4899"/>
@@ -536,18 +597,20 @@ function About() {
 
 function Resume() {
   return (
-    <section id="resume" className="sec" style={{background:'rgba(0,212,255,.02)',backdropFilter:'blur(4px)'}}>
+    <section id="resume" className="sec" style={{background:'transparent',position:'relative',padding:'160px 0'}}>
       <div className="sec-inner">
         <Reveal>
-          <div style={{textAlign:'center',marginBottom:'48px'}}>
-            <div className="sec-label" style={{justifyContent:'center'}}>02 — Resume</div>
-            <h2 className="sec-title">Download My <span className="grad-text">Resume.</span></h2>
-            <p style={{color:'#94a3b8',fontSize:'16px',maxWidth:'440px',margin:'0 auto',lineHeight:'1.7'}}>Get a detailed overview of my experience, skills, and projects.</p>
-          </div>
-        </Reveal>
-        <Reveal delay={100}>
-          <div style={{display:'flex',justifyContent:'center'}}>
-            <a href={DATA.resume} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{fontSize:'16px',padding:'16px 32px'}}>Download Resume 📄</a>
+          <div className="resume-box">
+            <div className="resume-content">
+              <div className="sec-label" style={{justifyContent:'center', color:'#00d4ff', border:'1px solid rgba(0,212,255,.2)', marginBottom:'24px'}}>02 — RESUME</div>
+              <h2 className="sec-title" style={{fontSize:'48px', marginBottom:'20px'}}>Ready to <span className="grad-text">Collaborate?</span></h2>
+              <p style={{color:'#cbd5e1',fontSize:'18px',maxWidth:'520px',margin:'0 auto 48px',lineHeight:'1.8'}}>
+                Get a comprehensive overview of my technical experience, engineering capabilities, and deployed projects. Let's build something exceptional together.
+              </p>
+              <a href={DATA.resume} target="_blank" rel="noopener noreferrer" className="btn-premium">
+                <span style={{fontSize:'22px'}}>⚡</span> Download Pro Resume
+              </a>
+            </div>
           </div>
         </Reveal>
       </div>
@@ -570,8 +633,8 @@ function Services() {
           {DATA.services.map((s,i) => (
             <Reveal key={s.title} delay={i*120}>
               <div className="proj-card" style={{textAlign:'center'}}>
-                <div className="proj-hero" style={{background:'linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.08))'}}>
-                  <span style={{fontSize:'60px'}}>{s.icon}</span>
+                <div className="proj-hero">
+                  <div className="proj-hero-bg" style={{backgroundImage:`url(${s.image})`}}></div>
                 </div>
                 <div className="proj-body">
                   <h3 style={{fontSize:'20px',fontWeight:'700',marginBottom:'8px',color:'#e2e8f0'}}>{s.title}</h3>
@@ -601,7 +664,7 @@ function Projects() {
             <Reveal key={p.title} delay={i*120}>
               <div className="proj-card">
                 <div className="proj-hero" style={{background:p.color}}>
-                  <span>{p.emoji}</span>
+                  <div className="proj-hero-bg" style={{backgroundImage:`url(${p.image})`}}></div>
                   <div className="proj-badge" style={{color:p.badgeColor,background:p.badgeBg}}>{p.date}</div>
                 </div>
                 <div className="proj-body">
@@ -634,12 +697,15 @@ function Certificates() {
         </Reveal>
         <div className="cert-scroll">
           {DATA.certs.map(c => (
-            <div key={c.title} className="cert-card">
-              <div className="cert-icon" style={{background:c.bg,border:`1px solid ${c.color}30`}}>{c.icon}</div>
+            <a key={c.title} href={c.link} target="_blank" rel="noopener noreferrer" className="cert-card" style={{textDecoration:'none', display:'block', minWidth:'280px'}}>
+              <div className="cert-icon" style={{background:c.bg, border:`1px solid ${c.color}30`, overflow:'hidden', padding:0, position:'relative', width:'100%', height:'140px', borderRadius:'16px'}}>
+                <img src={c.image} alt={c.title} style={{width:'100%', height:'100%', objectFit:'cover'}} />
+              </div>
               <div style={{fontFamily:'JetBrains Mono',fontSize:'9px',letterSpacing:'.2em',color:c.color,marginBottom:'7px',fontWeight:600}}>{c.org}</div>
                 <h4 style={{fontSize:'15px',fontWeight:'700',marginBottom:'6px',lineHeight:'1.4',color:'#e2e8f0'}}>{c.title}</h4>
               <div style={{fontSize:'12px',color:'#94a3b8',marginBottom:'16px'}}>{c.date}</div>
-            </div>
+              <div style={{fontSize:'11px', color:'#00d4ff', fontWeight:'600'}}>Verify Credential →</div>
+            </a>
           ))}
         </div>
       </div>
@@ -660,20 +726,22 @@ function Skills() {
         <div className="skills-grid">
           {DATA.skillGroups.map((g,i) => (
             <Reveal key={g.label} delay={i*80}>
-              <div className="skill-group">
-                <div style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'20px'}}>
-                  <span style={{fontSize:'22px'}}>{g.icon}</span>
+              <div className="skill-group" style={{'--c': g.color}}>
+                <div className="sg-header">
+                  <div className="sg-icon-wrap"><span className="sg-icon">{g.icon}</span></div>
                   <div>
-                    <div style={{fontFamily:'JetBrains Mono',fontSize:'9px',letterSpacing:'.2em',color:g.color,marginBottom:'2px',fontWeight:600}}>{g.label.toUpperCase()}</div>
-                    <div style={{fontSize:'14px',fontWeight:'700',color:'#e2e8f0'}}>{g.label}</div>
+                    <div className="sg-label">{g.label.toUpperCase()}</div>
+                    <div className="sg-title">{g.label}</div>
                   </div>
                 </div>
-                {g.items.map(s => (
-                  <div key={s} className="chip">
-                    <div className="chip-dot" style={{background:g.color,boxShadow:`0 0 5px ${g.color}60`}}/>
-                    {s}
-                  </div>
-                ))}
+                <div className="sg-items">
+                  {g.items.map(s => (
+                    <div key={s} className="chip">
+                      <div className="chip-dot"/>
+                      {s}
+                    </div>
+                  ))}
+                </div>
               </div>
             </Reveal>
           ))}
